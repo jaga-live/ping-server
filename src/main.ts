@@ -1,18 +1,30 @@
-import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { AllExceptionsFilter } from './core/exception';
+import 'reflect-metadata'
+import { Container } from "inversify";
+import { InversifyExpressServer } from "inversify-express-utils";
+import { UserService } from './api/users/users.service';
+import { UserRepository } from './api/users/users.repository';
 
-async function server() {
-  const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('v1', {
-    exclude : ['/']
-  })
 
-  app.useGlobalFilters(new AllExceptionsFilter)
-  app.useGlobalPipes(new ValidationPipe)
 
-  await app.listen(process.env.PORT);
+//Database
+import './database/mongo'
+//Controller
+import './api/users/users.controller'
+
+export async function start() {
+
+    ///Inversify
+    const container = new Container()
+
+    container.bind(UserService).toSelf()
+    container.bind(UserRepository).toSelf()
+    
+    //Servr Config
+    const server = new InversifyExpressServer(container)
+    const app = server.build()
+    app.listen(process.env.PORT, ()=> console.log('Server is running'))
+
 }
 
-server();
+
+start()
