@@ -17,6 +17,7 @@ export class UserService{
 
     //////View All Users
     async getUsers() {
+        // throw new Error()
         return this.userRepository.get()
     }
 

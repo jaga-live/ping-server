@@ -1,13 +1,10 @@
+import { NextFunction } from "express";
 import { inject } from "inversify";
-import { controller, httpGet, httpPost } from "inversify-express-utils";
+import { controller, httpGet, httpPost, next } from "inversify-express-utils";
 import { UserService } from "./users.service";
-
 @controller('/user')
 export class UserController{
-    constructor( 
-         @inject(UserService) private readonly userService: UserService
-     ) { }
-    
+    constructor( @inject(UserService) private readonly userService: UserService ) {}
     
     /////Create User
     @httpPost('')
@@ -15,10 +12,12 @@ export class UserController{
         ///Todo
     }
 
-
     ////View All Users
     @httpGet('')
-    async viewUsers(): Promise<any> {
+    async viewUsers(
+        @next() next: NextFunction
+    ): Promise<any> {
+        
         return this.userService.getUsers()
     }
 
