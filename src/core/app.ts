@@ -5,7 +5,7 @@ import { InversifyExpressServer } from 'inversify-express-utils'
 import { di_container } from './inversify/inversify.di'
 import { MongooseService } from '../database/mongo'
 
-// import '../api/users/users.controller'
+
 /////Configure Express Server
 export class App  {
   async setup() {

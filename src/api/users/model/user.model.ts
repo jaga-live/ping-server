@@ -2,14 +2,17 @@ import { Schema, model } from "mongoose";
 
 
 export interface IUser {
+    _id: string,
     name: string
+    userName: string
     email: string
     age?: Number
 }
 
 export const UserSchema = new Schema({
     name: String,
-    email: String
+    userName: String,
+    email: String,
 })
 
 

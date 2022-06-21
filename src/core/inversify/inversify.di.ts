@@ -1,11 +1,11 @@
 import { Container } from "inversify";
-import { UserRepository } from "../../api/users/users.repository";
-import { UserService } from "../../api/users/users.service";
+import { UserRepository } from "../../api/users/repository/users.repository";
+import { UserService } from "../../api/users/service/users.service";
 import { MongooseService } from "../../database/mongo";
 
 
 /////Import Controllers
-import '../../api/users/users.controller'
+import '../../api/users/controller/users.controller'
 
 export const di_container = new Container({
     defaultScope: 'Singleton'

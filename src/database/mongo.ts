@@ -9,15 +9,21 @@ const URI:any = process.env.MONGO_URI
 
 @injectable()
 export class MongooseService{
-    private _db: any
+  private _db: any
 
-    async connect() {
-        await mongoose.connect(URI)
-            .then(res => {
-                this._db = res
-        })
+  async connect() {
+      
+    try {
+      await mongoose.connect(URI)
+          .then(res => {
+              this._db = res
+      })
 
-    console.log('connected to DB')
+      console.log('Connected to MongoDB Atlas')
+      
+    } catch (error) {
+      console.log('Unable to connect to MongoDB Atlas', error)
+    }
   }
 
     get users() {
