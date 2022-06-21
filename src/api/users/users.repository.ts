@@ -1,12 +1,14 @@
 import { inject, injectable } from "inversify"
-import userModel from "./model/user.model"
+import { MongooseService } from "../../database/mongo"
 
 @injectable()
 export class UserRepository {
 
+    // constructor( private readonly db: MongooseService){}
+    constructor( @inject(MongooseService) private readonly db: MongooseService){}
     async get() {
-        var data = await userModel.find({})
-        return data 
+        var data = await this.db.users.countDocuments({})
+        return {data}
     }
 }
 

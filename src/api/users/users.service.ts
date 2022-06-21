@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { User } from "./model/user.model";
+import { IUser } from "./model/user.model";
 import { UserRepository } from "./users.repository";
 
 @injectable()
@@ -10,7 +10,7 @@ export class UserService{
     
 
     //////Create new User
-    async createUser(payload: User) {
+    async createUser(payload: IUser) {
         ////Todo
     }
 

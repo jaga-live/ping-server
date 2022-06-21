@@ -7,7 +7,7 @@ export interface IUser {
     age?: Number
 }
 
-const UserSchema = new Schema({
+export const UserSchema = new Schema({
     name: String,
     email: String
 })
@@ -15,5 +15,5 @@ const UserSchema = new Schema({
 
 // export const userModel = model('users', UserSchema)
 
-export default model<User>('users', UserSchema)
-export type User = typeof UserSchema
+// export default model<User>('users', UserSchema)
+export type UserModel = typeof UserSchema
