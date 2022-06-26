@@ -1,15 +1,13 @@
-/////TODO
-export function authMiddleware(funcToCallEveryTime: (...args: any[]) => void)
-{
-    return (target: any, key: string, descriptor: any) => 
-    {
-        var originalMethod = descriptor.value; 
+import { Request, Response, NextFunction } from "express"
+import { BaseMiddleware } from "inversify-express-utils";
 
-        descriptor.value =  function (...args: any[]) {
-            funcToCallEveryTime(...args);
-            return originalMethod.apply(target, args);
-        }
 
-        return descriptor;
+export class AuthGuard extends BaseMiddleware{
+    public handler(req: Request, res: Response, next: NextFunction) {
+        
+        ///TODO - Auth Middleware
+        console.log(req.url)
+        next()
+
     }
 }

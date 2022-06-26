@@ -2,18 +2,18 @@ import express from 'express'
 import { InversifyExpressServer } from 'inversify-express-utils'
 
 
-import { di_container } from './inversify/inversify.di'
+import { container } from './inversify/inversify.di'
 import { MongooseService } from '../database/mongo'
 
 
 /////Configure Express Server
 export class App  {
   async setup() {
-    const _db = di_container.get(MongooseService)
+    const _db = container.get(MongooseService)
 
     await _db.connect()
 
-    const server = new InversifyExpressServer(di_container)
+    const server = new InversifyExpressServer(container)
 
     server.setConfig((app) => {
       app.use(express.json())

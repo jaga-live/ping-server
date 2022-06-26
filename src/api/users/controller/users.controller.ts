@@ -1,7 +1,8 @@
 import { NextFunction, Request } from "express";
 import { inject } from "inversify";
-import { controller, httpGet, httpPost, next } from "inversify-express-utils";
-import { IUser } from "../model/user.model";
+import { controller, httpGet, httpPost, next, TYPE } from "inversify-express-utils";
+import { TYPES } from "../../../core/types";
+import { AuthGuard } from "../../auth/auth.midleware";
 import { UserService } from "../service/users.service";
 import { CreateUserDto, User } from "../_dto/users.dto";
 
@@ -19,7 +20,7 @@ export class UserController{
     }
 
     ////View All Users
-    @httpGet('')
+    @httpGet('', TYPES.AuthGuard)
     async viewUsers(
         @next() next: NextFunction
     ): Promise<any> {

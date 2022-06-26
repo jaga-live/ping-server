@@ -15,7 +15,7 @@ export class UserRepository {
 
     /////Fetch all data from repository
     async get() {
-        let data = await this.db.users.countDocuments({})
+        let data = await this.db.users.find({})
         return {data}
     }
 
