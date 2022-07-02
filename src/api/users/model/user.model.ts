@@ -5,14 +5,15 @@ export interface IUser {
     _id: string,
     name: string
     userName: string
-    email: string
-    age?: Number
+    email: string,
 }
 
 export const UserSchema = new Schema({
     name: String,
     userName: String,
     email: String,
+    _2fa: Object,
+    session: [String]
 })
 
 

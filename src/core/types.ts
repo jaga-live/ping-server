@@ -1,4 +1,9 @@
 export enum TYPES {
     //Middleware
-    AuthGuard = 'AuthGuard'
+    AuthGuard = 'AuthGuard',
+
+    //Service
+    UserService = 'UserService',
+    MailService = 'MailService',
+    Test = 'Test'
 }
