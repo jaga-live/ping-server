@@ -18,7 +18,7 @@ export class UserController{
 
     @httpGet('/1')
     async get1() {
-        return this.mailService.getMail()
+        return ''
     }
 
 }
