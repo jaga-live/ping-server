@@ -1,35 +1,25 @@
-import { inject, injectable } from "inversify"
-import { MongooseService } from "../../../database/mongo"
-import { IUser } from "../model/user.model"
+import { injectable } from "inversify";
+import { User } from "../model/users.model";
+
 
 @injectable()
-export class UserRepository {
-    constructor(@inject(MongooseService) private readonly db: MongooseService) { }
+export class UserRepository{
+    constructor() { }
     
 
-
-    async create(payload: any) {
-        let saveData = await this.db.users.insertMany(payload)
-        return saveData
+    async create_user(payload: any) {
+        await User.insertMany(payload)
+        
     }
 
-    /////Fetch all data from repository
-    async get() {
-        let data = await this.db.users.find({})
-        return {data}
+    ////Find User by Email
+    async find_by_email(email: string) {
+        let user = await User.findOne({ email })
+        return user
     }
 
-    //////Find by userName
-    async findByUsername(userName: string): Promise<IUser | null> {
-        let userData: IUser = await this.db.users.findOne({ userName })
-        return userData
-    }
-
-
-    //////Find by email
-    async findByEmail(email: string): Promise<IUser | null> {
-        let userData: IUser = await this.db.users.findOne({ email })
-        return userData
+    async find_by_userName(userName: string) {
+        let user = await User.findOne({ userName })
+        return user
     }
 }
-

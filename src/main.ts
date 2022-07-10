@@ -1,12 +1,14 @@
 import 'reflect-metadata'
-import 'dotenv/config'
 
-import { App } from './core/app';
+import { App } from './core/app'
+import { Mongoose } from './database/mongoose'
 
+async function bootstrap() {
+    ///Connect to MongoDB Atlas
+    new Mongoose().connect()
 
-//////Bootstrap
-export async function start() {
-    new App().setup()
+    ///Start Server
+    new App().start()
 }
 
-start()
+bootstrap()

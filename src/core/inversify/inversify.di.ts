@@ -9,6 +9,7 @@ import '../../api/users/controller/users.controller'
 import { AuthGuard } from "../../api/auth/auth.midleware";
 import { TYPES } from "../types";
 import { MailService } from '../../api/mail/mail';
+import { IMail } from '../../api/mail/interface/mail.interface';
 
 export const container = new Container({
     defaultScope: 'Singleton'
@@ -21,7 +22,7 @@ container.bind<AuthGuard>(TYPES.AuthGuard).to(AuthGuard)
 /////Service
 container.bind(MongooseService).toSelf()
 container.bind<UserService>(TYPES.UserService).to(UserService)
-container.bind<MailService>(TYPES.MailService).to(MailService)
+container.bind<IMail>(TYPES.MailService).to(MailService)
 
 /////Repository
 container.bind(UserRepository).toSelf()

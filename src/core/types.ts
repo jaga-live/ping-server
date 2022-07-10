@@ -1,9 +1,8 @@
-export enum TYPES {
+export const TYPES = {
     //Middleware
-    AuthGuard = 'AuthGuard',
+    AuthGuard : Symbol('AuthGuard'),
 
     //Service
-    UserService = 'UserService',
-    MailService = 'MailService',
-    Test = 'Test'
+    UserService : Symbol('UserService'),
+    MailService : Symbol('MailService')
 }

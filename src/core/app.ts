@@ -1,30 +1,20 @@
+import { InversifyExpressServer } from "inversify-express-utils";
+import { container } from "./inversify/inversify.config";
 import express from 'express'
-import { InversifyExpressServer } from 'inversify-express-utils'
 
+export class App {
+    async start() {
 
-import { container } from './inversify/inversify.di'
-import { MongooseService } from '../database/mongo'
+        const server = new InversifyExpressServer(container)
+        server.setConfig((app) => {
+            app.use(express.json())
+        })
 
-
-/////Configure Express Server
-export class App  {
-  async setup() {
-    const _db = container.get(MongooseService)
-
-    await _db.connect()
-
-    const server = new InversifyExpressServer(container)
-
-    server.setConfig((app) => {
-      app.use(express.json())
+        const app = server.build()
+         app.listen(5000, () => {
+            console.log(
+            `Server is running on http://localhost:${5000}`
+        )
     })
-
-    const app = server.build()
-
-    app.listen(process.env.PORT, () => {
-      console.log(
-        `Server is running on http://localhost:${process.env.PORT}`
-      )
-    })
-  }
+    }
 }
