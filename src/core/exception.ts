@@ -1,13 +1,15 @@
-import *as HttpStatus from "http-status"
 import { NextFunction, Response, Request } from 'express'
 /////TODO - Handle Global Exception in Separate File
 
-class ErrorHandler{
-   
+export class HttpException extends Error{
+    constructor(
+        public readonly message: string,
+        public readonly statusCode: number,
+
+    ) { 
+        super(message)
+    }
+    
 }
 
 
-export default function GlobalErrorHandler(err: Error, req: Request, res: Response, next: NextFunction): any {
-
-    console.log(err)
-}

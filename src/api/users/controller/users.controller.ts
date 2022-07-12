@@ -24,9 +24,11 @@ export class UserController{
             type: 'welcomeMail',
             messageConfig: { receiverName: payload.name }
         }
+        
+        var userData = await this.userService.signupUser(payload)
+        
         await this.mailService.sendMail(mailConfig)
-
-        return this.userService.signupUser(payload)
+        return userData
     }
 
 

@@ -1,10 +1,10 @@
 import { inject, injectable } from "inversify";
 import { UserRepository } from "../repository/users.repository";
+import { HttpException } from '../../../core/exception'
 
 export interface IUserService{
     signupUser(payload: any): Promise<string>
 }
-
 @injectable()
 export class UserService implements IUserService{
     constructor(
@@ -16,7 +16,7 @@ export class UserService implements IUserService{
         
         /////Validate Email
         let validateEmail = await this.User.find_by_email(email)
-        if (validateEmail) throw new Error('Email already exists')
+        if (validateEmail) throw new HttpException('Email already exists', 400)
 
         /////Validate Username
         let validateUsername = await this.User.find_by_userName(userName)
