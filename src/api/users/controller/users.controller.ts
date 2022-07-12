@@ -17,10 +17,16 @@ export class UserController{
 
         /////Save User
         var payload = await CreateUserDto.validate(req.body)
-        return this.userService.signupUser(payload)
-
+        
         /////Send Welcome Mail
-        await this.mailService.sendMail()
+        const mailConfig = {
+            to: payload.email,
+            type: 'welcomeMail',
+            messageConfig: { receiverName: payload.name }
+        }
+        await this.mailService.sendMail(mailConfig)
+
+        return this.userService.signupUser(payload)
     }
 
 

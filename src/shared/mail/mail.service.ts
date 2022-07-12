@@ -4,8 +4,9 @@ import * as path from 'path'
 import nodemailer from 'nodemailer'
 import 'dotenv/config'
 import { MailDto } from "./mail.dto";
+import { MailFactory } from "./factory/mail.factory";
 export interface IMailService{
-    sendMail(): any
+    sendMail(config: any): any
 }
 
 /////Mail Module
@@ -37,7 +38,7 @@ class Mail{
             ...mailConfig
         };
 
-        console.log(mailOption)
+        
         transporter.sendMail(mailOption, (error, res) => {
             if (error) { console.log(error) }
             else { console.log(res) }
@@ -50,17 +51,14 @@ class Mail{
 @injectable()
 export class MailService implements IMailService{
     constructor(
-        
     ) { }
     
-    async sendMail() {
-        var tempPath = fs.readFileSync(path.join(__dirname, './templates/signup.hbs'), 'utf8');
+    async sendMail(config: any) {
         
-        // new Mail().send({
-        //     to: 'jagadheesh6@gmail.com',
-        //     subject: 'TEST Email',
-        //     html: tes
-        // })
+        /////Get Config from factory
+        var mailConfig = MailFactory.getConfig(config)
+        
+        new Mail().send(mailConfig)
     }
 }
 

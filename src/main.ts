@@ -11,8 +11,6 @@ async function bootstrap() {
     ///Start Server
     new App().start()
 
-    ////TEST
-    new MailService().sendMail()
 }
 
 bootstrap()
