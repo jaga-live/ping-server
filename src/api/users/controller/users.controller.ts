@@ -3,6 +3,7 @@ import { controller, httpGet, httpPost, TYPE } from "inversify-express-utils";
 import { TYPES } from "../../../core/inversify/types";
 import { IMailService } from "../../../shared/mail/mail.service";
 import { IUserService } from "../service/users.service";
+import { CreateUserDto } from '../_dto/users.dto'
 
 @controller('/user')
 export class UserController{
@@ -13,12 +14,14 @@ export class UserController{
     
     @httpPost('/signup')
     async signup(req: any) {
-        return this.userService.signupUser(req.body)
+
+        /////Save User
+        var payload = await CreateUserDto.validate(req.body)
+        return this.userService.signupUser(payload)
+
+        /////Send Welcome Mail
+        await this.mailService.sendMail()
     }
 
-    @httpGet('/1')
-    async get1() {
-        return ''
-    }
 
 }

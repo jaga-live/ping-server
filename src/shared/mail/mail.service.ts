@@ -54,7 +54,7 @@ export class MailService implements IMailService{
     ) { }
     
     async sendMail() {
-        var tes = fs.readFileSync(path.join(__dirname, './templates/signup.hbs'), 'utf8');
+        var tempPath = fs.readFileSync(path.join(__dirname, './templates/signup.hbs'), 'utf8');
         
         // new Mail().send({
         //     to: 'jagadheesh6@gmail.com',

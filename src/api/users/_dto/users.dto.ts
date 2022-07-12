@@ -1,3 +1,5 @@
+import Joi from "joi"
+
 ///////User DTO
 export class User {
     constructor(
@@ -18,7 +20,7 @@ export class User {
 }
 
 
-//////Create User DTO
+
 export class CreateUserDto{
     constructor(
        public readonly name: string,
@@ -26,16 +28,19 @@ export class CreateUserDto{
        public readonly email: string,
     ) { }
     
-    static create(body: CreateUserDto) {
-        if (!body.name) {
-            throw new Error('Name Missing')
-        }
+    public static async validate(dto: CreateUserDto) {
 
-        return new CreateUserDto(
-            body.name,
-            body.userName,
-            body.email
-        )
+        const schema = Joi.object({
+            name: Joi.string().required(),
+            email: Joi.string().email().required(),
+            userName: Joi.string().min(3).required()
+        })
+
+        const validate = await schema.validateAsync(dto)
+        return validate
+
     }
+
 }
+
 
