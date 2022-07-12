@@ -16,11 +16,11 @@ export class UserService implements IUserService{
         
         /////Validate Email
         let validateEmail = await this.User.find_by_email(email)
-        if (validateEmail) throw new HttpException('Email already exists', 400)
+        if (validateEmail) throw new HttpException('Email already exists', 409)
 
         /////Validate Username
         let validateUsername = await this.User.find_by_userName(userName)
-        if (validateUsername) throw new Error('Username already exists')
+        if (validateUsername) throw new HttpException('Username already exists', 409)
         
         await this.User.create_user(payload)
         return payload
