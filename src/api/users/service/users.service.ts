@@ -11,6 +11,7 @@ export class UserService implements IUserService{
         @inject(UserRepository) private readonly User: UserRepository
     ) { }
     
+    /////Signup User
     async signupUser(payload: any): Promise<string> {
         const { email, userName } = payload
         
@@ -22,6 +23,7 @@ export class UserService implements IUserService{
         let validateUsername = await this.User.find_by_userName(userName)
         if (validateUsername) throw new HttpException('Username already exists', 409)
         
+        ///Persist user data
         await this.User.create_user(payload)
         return payload
     }

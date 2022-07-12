@@ -19,6 +19,7 @@ export class App {
                 if (err instanceof HttpException) {
                     res.status(err.statusCode).json({error: err.message})
                 } else {
+                    console.log(err)
                      res.status(500).json({error: 'Internal Server Exception'})
                 }
             })

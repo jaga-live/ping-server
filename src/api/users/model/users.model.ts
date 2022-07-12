@@ -7,7 +7,10 @@ export const UserSchma = new Schema({
     userName: String,
     password: String,
     session: [String],
-    _2fa: Object
+    _2fa: {
+        type: Object,
+        default: null
+    }
 })
 
 export const User = model('users', UserSchma)

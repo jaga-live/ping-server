@@ -1,7 +1,7 @@
 import Joi from "joi"
 
 ///////User DTO
-export class User {
+export class UserDto {
     constructor(
        public readonly _id: string,
        public readonly name: string,
@@ -9,8 +9,8 @@ export class User {
        public readonly email: string,
     ) { }
     
-    static create(body: User) {
-        return new User(
+    static create(body: UserDto) {
+        return new UserDto(
             body._id,
             body.name,
             body.userName,
