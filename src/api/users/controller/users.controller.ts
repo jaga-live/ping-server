@@ -22,7 +22,7 @@ export class UserController{
         const mailConfig = {
             to: payload.email,
             type: 'welcomeMail',
-            messageConfig: { receiverName: payload.name }
+            context: { receiverName: payload.name }
         }
         
         var userData = await this.userService.signupUser(payload)

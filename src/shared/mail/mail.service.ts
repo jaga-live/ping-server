@@ -1,10 +1,11 @@
 import { injectable } from "inversify";
-import * as fs from 'fs'
 import * as path from 'path'
 import nodemailer from 'nodemailer'
 import 'dotenv/config'
 import { MailDto } from "./mail.dto";
 import { MailFactory } from "./factory/mail.factory";
+import hbs from 'nodemailer-express-handlebars'
+
 export interface IMailService{
     sendMail(config: any): any
 }
@@ -16,7 +17,8 @@ class Mail{
         var mailConfig = new MailDto(
             payload.to,
             payload.subject,
-            payload.html
+            payload.template,
+            payload.context
         )
         
         var transporter = nodemailer.createTransport({
@@ -32,6 +34,18 @@ class Mail{
                 pass: process.env.EMAIL_PASS,
             },
         })
+
+        const handlebarOptions: any = {
+            viewEngine: {
+                extName: ".hbs",
+                partialsDir: path.resolve('./src/shared/mail/templates'),
+                defaultLayout: false,
+            },
+            viewPath: path.resolve('./src/shared/mail/templates'),
+            extName: ".hbs",
+}
+
+        transporter.use('compile', hbs(handlebarOptions))
 
           var mailOption = {
             from: process.env.EMAIL,

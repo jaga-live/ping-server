@@ -7,12 +7,15 @@ import { User } from "../users/model/users.model";
 import { UserRepository } from "../users/repository/users.repository";
 import * as jwt from 'jsonwebtoken'
 import { compareSync, hashSync } from "bcrypt";
+import { TYPES } from "../../core/inversify/types";
+import { MailService } from "../../shared/mail/mail.service";
 
 @injectable()
 export class AuthService{
     private readonly JWT_SECRET: any = process.env.JWT_SECRET
     constructor(
-        @inject(UserRepository) private readonly UserRepo: UserRepository
+        @inject(UserRepository) private readonly UserRepo: UserRepository,
+        @inject(TYPES.MailService) private readonly mailService: MailService
     ) { }
     
     /////Login with Email Pass
@@ -49,6 +52,13 @@ export class AuthService{
         })
 
         ////TODO - Mail OTP
+        this.mailService.sendMail({
+            type: 'send_otp',
+            to: email,
+            context: {
+                otp
+            }
+        })
 
         return {
             message: 'OTP sent successfully',
