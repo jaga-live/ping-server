@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
 
 
-export const UserSchma = new Schema({
+export const UserSchema = new Schema({
     name: String,
     email: String,
     userName: String,
@@ -13,4 +13,4 @@ export const UserSchma = new Schema({
     }
 })
 
-export const User = model('users', UserSchma)
+export const User = model('users', UserSchema)

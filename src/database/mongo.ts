@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import { injectable } from "inversify";
 import 'dotenv/config'
+import { UserSchema } from "../api/users/model/users.model";
 
-import {UserModel, UserSchema} from '../api/users/model/user.model'
 
 ///Config
 const URI:any = process.env.MONGO_URI
