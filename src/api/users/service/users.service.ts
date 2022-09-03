@@ -1,32 +1,32 @@
-import { inject, injectable } from "inversify";
-import { UserRepository } from "../repository/users.repository";
-import { HttpException } from '../../../core/exception'
+import { inject, injectable } from 'inversify';
+import { UserRepository } from '../repository/users.repository';
+import { HttpException } from '../../../core/exception';
 
 export interface IUserService{
     signupUser(payload: any): Promise<string>
 }
 @injectable()
 export class UserService implements IUserService{
-    constructor(
+	constructor(
         @inject(UserRepository) private readonly User: UserRepository
-    ) { }
+	) { }
     
-    /////Signup User
-    async signupUser(payload: any): Promise<string> {
-        const { email, userName } = payload
+	/////Signup User
+	async signupUser(payload: any): Promise<string> {
+		const { email, userName } = payload;
         
-        /////Validate Email
-        let validateEmail = await this.User.find_by_email(email)
-        if (validateEmail) throw new HttpException('Email already exists', 409)
+		/////Validate Email
+		const validateEmail = await this.User.find_by_email(email);
+		if (validateEmail) throw new HttpException('Email already exists', 409);
 
-        /////Validate Username
-        let validateUsername = await this.User.find_by_userName(userName)
-        if (validateUsername) throw new HttpException('Username already exists', 409)
+		/////Validate Username
+		const validateUsername = await this.User.find_by_userName(userName);
+		if (validateUsername) throw new HttpException('Username already exists', 409);
         
-        ///Persist user data
-        await this.User.create_user(payload)
-        return payload
-    }
+		///Persist user data
+		await this.User.create_user(payload);
+		return payload;
+	}
 
     
 }
