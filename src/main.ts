@@ -12,8 +12,6 @@ async function bootstrap() {
 	///Start Server
 	new App().start();
 
- 
-
 }
 
 bootstrap();

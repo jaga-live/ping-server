@@ -11,7 +11,5 @@ export class Mongoose{
 			.then(res => console.log('MongoDB Atlas Connected'))
 			.catch(err=> console.log('Cannot connect to MongoDB Atlas'));
 	}
-
-    
 }
 
