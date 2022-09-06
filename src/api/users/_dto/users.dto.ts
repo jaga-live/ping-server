@@ -5,7 +5,7 @@ export class UserDto {
 	constructor(
        public readonly _id: string,
        public readonly name: string,
-       public readonly userName: string,
+       public readonly user_name: string,
        public readonly email: string,
 	) { }
     
@@ -13,7 +13,7 @@ export class UserDto {
 		return new UserDto(
 			body._id,
 			body.name,
-			body.userName,
+			body.user_name,
 			body.email
 		);
 	}
@@ -24,7 +24,7 @@ export class UserDto {
 export class CreateUserDto{
 	constructor(
        public readonly name: string,
-       public readonly userName: string,
+       public readonly user_name: string,
        public readonly email: string,
 	) { }
     
@@ -33,7 +33,7 @@ export class CreateUserDto{
 		const schema = Joi.object({
 			name: Joi.string().required(),
 			email: Joi.string().email().required(),
-			userName: Joi.string().min(3).required()
+			user_name: Joi.string().min(3).required()
 		});
 
 		const validate = await schema.validateAsync(dto);

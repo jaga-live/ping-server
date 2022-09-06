@@ -1,5 +1,6 @@
 import { injectable } from 'inversify';
-import { User } from '../model/users.model';
+import User, { IUser } from '../model/users.model';
+import { UserDto } from '../_dto/users.dto';
 
 
 @injectable()
@@ -7,8 +8,9 @@ export class UserRepository{
 	constructor() { }
     
 	/////CREATE
-	async create_user(payload: any) {
-		await User.insertMany(payload);
+	async create_user(payload: any): Promise<IUser> {
+		const createUser: any = await User.insertMany(payload);
+		return createUser;
         
 	}
 
@@ -19,8 +21,8 @@ export class UserRepository{
 		return user;
 	}
 
-	async find_by_userName(userName: string) {
-		const user = await User.findOne({ userName });
+	async find_by_user_name(user_name: string) {
+		const user = await User.findOne({ user_name });
 		return user;
 	}
 

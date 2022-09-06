@@ -16,6 +16,7 @@ export const container = new Container({
 /////Controllers
 import '../../api/users/controller/users.controller';
 import '../../api/auth/auth.controller';
+import { AuthRepository } from '../../api/auth/repository/auth.repository';
 
 ///////Bindings
 
@@ -30,3 +31,4 @@ container.bind<IMailService>(TYPES.MailService).to(MailService);
 
 /////Repository
 container.bind(UserRepository).toSelf();
+container.bind(AuthRepository).toSelf();

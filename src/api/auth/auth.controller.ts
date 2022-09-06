@@ -14,8 +14,8 @@ export class AuthController{
     /////Login User
     @httpPost('/login')
 	async login(req: Request) {
-		const { email, password } = req.body;
-		return this.authService.login(email, password);
+		const { email } = req.body;
+		return this.authService.login(email);
 	}
 
     //////Send OTP
