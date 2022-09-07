@@ -1,10 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-import { BaseMiddleware } from 'inversify-express-utils';
+import { NextFunction, Request, Response } from 'express';
 
+export const AuthGuard = (req: Request, res: Response, next: NextFunction) => {
+	console.log('Auth Middleware');
+	next();
 
-export class AuthGuard extends BaseMiddleware{
-	public handler(req: Request,  res: Response, next: NextFunction): void {
-		console.log('Auth Middleware'); 
-		next();
-	}
-}
+};

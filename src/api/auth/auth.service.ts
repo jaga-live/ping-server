@@ -10,6 +10,7 @@ import { TYPES } from '../../core/inversify/types';
 import { MailService } from '../../shared/mail/mail.service';
 import { AuthRepository } from './repository/auth.repository';
 import { Types } from 'mongoose';
+import { IAuth } from './model/auth.model';
 
 @injectable()
 export class AuthService{
@@ -28,9 +29,10 @@ export class AuthService{
 		if (!isUserValid) throw new HttpException('Invalid Email or Password', 400);
         
 		///Send OTP via Email
-		await this.sendOtp(email);
+		const getOtp = await this.sendOtp(email);
 		return {
-			message: 'OTP sent'
+			message: 'OTP sent',
+			dev_otp: getOtp.dev_otp
 		};
 	}
 
@@ -47,8 +49,11 @@ export class AuthService{
 		const otpHash = hashSync(otp, 12);
 		const signature = jwt.sign({}, this.JWT_SECRET, { expiresIn: '300s' });
 
+		///Get Auth
+		const getAuth = await this.AuthRepo.find(user._id);
+		
 		/////Update OTP for the user
-		await User.updateOne({ _id: user._id }, {
+		await this.AuthRepo.update(getAuth._id, {
 			$set: {
 				_2fa: {
 					otp: otpHash,
@@ -56,15 +61,6 @@ export class AuthService{
 				}
 			}
 		});
-
-		await this.AuthRepo.create({
-			_2fa: {
-				otp: otpHash,
-				signature
-			},
-			userId: new Types.ObjectId(user._id)
-		});
-
 
 		////TODO - Mail OTP
 		this.mailService.sendMail({
@@ -90,11 +86,11 @@ export class AuthService{
 		if (!user) throw new HttpException('Email not found', 400);
 
 		///Get Ref
-		
+		const getAuth: IAuth = await this.AuthRepo.find(user._id);
         
 		/////Validate OTP
-		// const { _2fa } = user;
-		const _2fa = {signature: '', otp: ''};
+		const { _2fa } = getAuth;
+
 		if (!_2fa) throw new HttpException('OTP Expired', 400);
 
 		try {
@@ -112,11 +108,14 @@ export class AuthService{
 			sessionId
 		}, this.JWT_SECRET);
 
-		////Update Session for the User
-		await User.updateOne({ _id: user._id }, {
+		///Update Session
+		await this.AuthRepo.update(getAuth._id, {
 			$push: { session: sessionId },
 			$set: {
-				_2fa: null
+				_2fa: {
+					signature: null,
+					otp: null
+				}
 			}
 		});
 

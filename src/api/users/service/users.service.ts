@@ -35,8 +35,9 @@ export class UserService implements IUserService{
 
 		///Create Auth for User
 		await this.AuthRepo.create({
-			userId: new Types.ObjectId(createUser._id)
+			userId: new Types.ObjectId(createUser[0]._id)
 		});
+
 		const mailConfig = {
 			to: payload.email,
 			type: 'welcomeMail',

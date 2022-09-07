@@ -3,6 +3,7 @@ import { controller, httpGet, httpPost, TYPE } from 'inversify-express-utils';
 import { Types } from 'mongoose';
 import { TYPES } from '../../../core/inversify/types';
 import { IMailService } from '../../../shared/mail/mail.service';
+import { AuthGuard } from '../../auth/middleware/auth.middleware';
 import { AuthRepository } from '../../auth/repository/auth.repository';
 import { IUserService } from '../service/users.service';
 import { CreateUserDto } from '../_dto/users.dto';
@@ -24,7 +25,7 @@ export class UserController{
 		return createUser;
 	}
 
-    @httpGet('')
+    @httpGet('/profile', AuthGuard)
     async get() {
     	return 'Hello';
     }
