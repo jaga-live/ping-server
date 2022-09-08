@@ -8,7 +8,8 @@ import { AuthRepository } from '../../auth/repository/auth.repository';
 import { Types } from 'mongoose';
 
 export interface IUserService{
-    signupUser(payload: any): Promise<IUser>
+    signupUser(payload: any): Promise<IUser>,
+    profile(userId: Types.ObjectId): Promise<IUser>,
 }
 @injectable()
 export class UserService implements IUserService{
@@ -50,8 +51,9 @@ export class UserService implements IUserService{
 
 
 	///Find Single User
-	async profile() {
-		
+	async profile(userId: Types.ObjectId): Promise<IUser> {
+		const user = await this.UserRepo.find_by_id(userId);
+		return user;
 	}
 
     

@@ -1,12 +1,11 @@
 import { inject } from 'inversify';
-import { controller, httpGet, httpPost, TYPE } from 'inversify-express-utils';
+import { controller, httpGet, httpPost, request, requestBody, TYPE } from 'inversify-express-utils';
 import { Types } from 'mongoose';
 import { TYPES } from '../../../core/inversify/types';
-import { IMailService } from '../../../shared/mail/mail.service';
+import { Req } from '../../../core/types/custom.types';
 import { AuthGuard } from '../../auth/middleware/auth.middleware';
-import { AuthRepository } from '../../auth/repository/auth.repository';
 import { IUserService } from '../service/users.service';
-import { CreateUserDto } from '../_dto/users.dto';
+import { CreateUserDto, UserDto } from '../_dto/users.dto';
 
 @controller('/user')
 export class UserController{
@@ -26,8 +25,11 @@ export class UserController{
 	}
 
     @httpGet('/profile', AuthGuard)
-    async get() {
-    	return 'Hello';
+    async get(@request() req: Req) {
+    	const { userId } = req.userData;
+
+    	const user = await this.userService.profile(new Types.ObjectId(userId)) as UserDto;
+    	return UserDto.create(user);
     }
 
 

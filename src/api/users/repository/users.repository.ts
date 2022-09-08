@@ -1,4 +1,5 @@
 import { injectable } from 'inversify';
+import { Types } from 'mongoose';
 import User, { IUser } from '../model/users.model';
 import { UserDto } from '../_dto/users.dto';
 
@@ -15,6 +16,11 @@ export class UserRepository{
 	}
 
 	/////GET
+	////Find User by id
+	async find_by_id(_id: Types.ObjectId) {
+		const user = await User.findOne({ _id });
+		return user;
+	}
 	////Find User by Email
 	async find_by_email(email: string) {
 		const user = await User.findOne({ email });
