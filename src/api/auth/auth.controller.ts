@@ -22,7 +22,6 @@ export class AuthController{
     @httpGet('/2fa/send_otp/:email')
     async sendOtp(req: Request) {
     	const { email } = req.params;
-        
     	return this.authService.sendOtp(email);
     }
 

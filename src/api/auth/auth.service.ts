@@ -102,7 +102,7 @@ export class AuthService{
 		////Create Session
 		const sessionId = v4();
 		const jwtToken = jwt.sign({
-			_id: user._id,
+			userId: user._id,
 			email,
 			role: user.role,
 			sessionId

@@ -48,5 +48,11 @@ export class UserService implements IUserService{
 		return createUser;
 	}
 
+
+	///Find Single User
+	async profile() {
+		
+	}
+
     
 }
