@@ -13,7 +13,11 @@ export const container = new Container({
 /////Controllers
 import '../../api/users/controller/users.controller';
 import '../../api/auth/auth.controller';
+import '../../api/friends/controller/friends.controller';
 import { AuthRepository } from '../../api/auth/repository/auth.repository';
+import { FriendRepository } from '../../api/friends/repository/friends.repository';
+import { FriendService, IFriendService } from '../../api/friends/service/friend.service';
+import { FriendRequestRepository } from '../../api/friends/repository/friend_request.repository';
 
 ///////Bindings
 
@@ -21,8 +25,11 @@ import { AuthRepository } from '../../api/auth/repository/auth.repository';
 container.bind<AuthService>(TYPES.AuthService).to(AuthService);
 container.bind<Mongoose>(TYPES.MongooseService).to(Mongoose);
 container.bind<IUserService>(TYPES.UserService).to(UserService);
+container.bind<IFriendService>(TYPES.FriendService).to(FriendService);
 container.bind<IMailService>(TYPES.MailService).to(MailService);
 
 /////Repository
 container.bind(UserRepository).toSelf();
 container.bind(AuthRepository).toSelf();
+container.bind(FriendRepository).toSelf();
+container.bind(FriendRequestRepository).toSelf();
