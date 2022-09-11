@@ -16,6 +16,12 @@ export class FriendRequestRepository{
 		return friendRequest.save();
 	}
 
+	///Find by if
+	async find_by_id(_id: Types.ObjectId) {
+		const friendRequest = await FriendRequest.findOne({ _id });
+		return friendRequest;
+	}
+
 	///Find by Sender
 	async find_by_sender(_id: Types.ObjectId): Promise<IFriend> {
 		const friendRequest = await FriendRequest.findOne({
@@ -32,5 +38,12 @@ export class FriendRequestRepository{
 		}) as IFriend;
 
 		return friendRequest;
+	}
+
+	///Update Friend Request
+	async update(requestId: Types.ObjectId, expression: any) {
+		await FriendRequest.updateOne({ _id: requestId }, {
+			...expression
+		});
 	}
 }

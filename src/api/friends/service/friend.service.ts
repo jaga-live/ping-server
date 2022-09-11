@@ -48,14 +48,33 @@ export class FriendService implements IFriendService{
 		if (!FriendRequestActions.includes(action)) throw new HttpException('Invalid Actions', 400);
         
 		///Validate user
-		const isUserValid = await this.friendRepo.findRequestByfriends([userId]);
-		if (!isUserValid || isUserValid.status !== 'pending') throw new HttpException('Bad Request', 400);
+		const isUser = await this.userRepo.find_by_id(new Types.ObjectId(userId));
+		if (!isUser) throw new HttpException('User Not Found', 400);
 
+		///Validate friend request
+		const isRequestValid = await this.friendRequestRepo.find_by_id(new Types.ObjectId(requestId));
+		if (!isRequestValid || isRequestValid?.status !== 'pending') throw new HttpException('Cannot process request', 400);
+		
 		const expression = {
 			status: action === 'accept' ? 'accepted' : 'rejected'
 		};
 
-		await this.friendRepo.update(requestId, expression);
+		///Update status in request
+		await this.friendRequestRepo.update(requestId, expression);
+
+		///Create new Relationship
+		await this.friendRepo.create(
+			[
+				new Types.ObjectId(userId),
+				new Types.ObjectId(requestId),
+			]
+		);
         
+	}
+
+	///View Friend Request
+	async view_friends(userId: Types.ObjectId) {
+		const friends = await this.friendRepo.findAll(userId);
+		return friends;
 	}
 }

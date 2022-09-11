@@ -2,17 +2,14 @@ import { Document, model, Schema, Types } from 'mongoose';
 
 
 export interface IFriend extends Document{
-    users: Types.ObjectId[],
-    status: string,
+	users: Types.ObjectId[],
+	createdAt: Date,
     blockedBy: string[]
 }
 
 const FriendSchema = new Schema({
 	users: [Types.ObjectId],
-	status: {
-		type: String,
-		default: 'pending'
-	},
+	createdAt: Date,
 	blockedBy: [String]
 });
 
