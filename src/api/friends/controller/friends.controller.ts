@@ -1,5 +1,5 @@
 import { inject } from 'inversify';
-import { controller, httpGet, httpPatch, httpPost, request, requestBody, requestParam } from 'inversify-express-utils';
+import { controller, httpDelete, httpGet, httpPatch, httpPost, request, requestBody, requestParam } from 'inversify-express-utils';
 import { Types } from 'mongoose';
 import { TYPES } from '../../../core/inversify/types';
 import { Req } from '../../../core/types/custom.types';
@@ -19,14 +19,14 @@ export class FriendController{
         @requestBody() payload: any,
         @request() req: Req
 	) {
-		await this.friendService.send_request(payload.friendId, req.userData.userId);
+		await this.friendService.send_request(req.userData.userId, payload.friendId);
 		return {
 			message: 'Friend Request Sent'
 		};
 	}
 
     ///Accept or Reject Request
-    @httpPatch('friend/request/:requestId/:action', AuthGuard)
+    @httpPatch('/friend/request/:requestId/:action', AuthGuard)
     async acceptOrReject(
         @requestParam('requestId') requestId: string,
         @requestParam('action') action: string,
@@ -52,4 +52,20 @@ export class FriendController{
     	const { userId } = req.userData;
     	return this.friendService.view_friends(new Types.ObjectId(userId));
     }
+	
+	///Remove Friend
+	@httpDelete('/friend/:friendId', AuthGuard)
+	async removeFriend(
+		@requestParam('friendId') friendId: string,
+		@request() req: Req
+	) {
+		const { userId } = req.userData;
+		await this.friendService.remove_friend(
+			new Types.ObjectId(userId),
+			new Types.ObjectId(friendId)
+		);
+		return {
+			message: 'Unfriended'
+		};
+	}
 }

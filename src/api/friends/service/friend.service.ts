@@ -7,7 +7,10 @@ import { FriendRequestRepository } from '../repository/friend_request.repository
 import { CreateFriendDto, FriendRequestActions } from '../_dto/friends.dto';
 
 export interface IFriendService{
-    send_request(userId: string, friendId: string): Promise<any>
+	send_request(userId: string, friendId: string): Promise<any>,
+	accept_or_reject(userId: Types.ObjectId, requestId: Types.ObjectId, action: string),
+	view_friends(userId: Types.ObjectId),
+	remove_friend(userId: Types.ObjectId, friendId: Types.ObjectId)
 }
 
 @injectable()
@@ -76,5 +79,23 @@ export class FriendService implements IFriendService{
 	async view_friends(userId: Types.ObjectId) {
 		const friends = await this.friendRepo.findAll(userId);
 		return friends;
+	}
+
+	///Remove Friend
+	async remove_friend(userId: Types.ObjectId, friendId: Types.ObjectId) {
+		const users: Types.ObjectId[] = [userId, friendId];
+
+		///Remove Friend
+		await this.friendRepo.delete({
+			users: { $in: users }
+		});
+
+		///Remove related friend requests
+		await this.friendRequestRepo.delete({
+			$or: [
+				{ sender: userId, receiver: friendId },
+				{ sender: friendId, receiver: userId }
+			]
+		});
 	}
 }
