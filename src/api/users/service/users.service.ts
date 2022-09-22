@@ -27,9 +27,13 @@ export class UserService implements IUserService{
 		const validateEmail = await this.UserRepo.find_by_email(email);
 		if (validateEmail) throw new HttpException('Email already exists', 409);
 
-		/////Validate user_name
-		const validate_user_name = await this.UserRepo.find_by_user_name(user_name);
-		if (validate_user_name) throw new HttpException('user_name already exists', 409);
+		/////Validate user_name duplication
+		const validate_user_name_duplication = await this.UserRepo.find_by_user_name(user_name);
+		if (validate_user_name_duplication) throw new HttpException('user_name already exists', 409);
+
+		///Validate Username
+		const validate_user_name = this.validateUsername(user_name);
+		if(!validate_user_name) throw new HttpException('Invalid Username', 400);
         
 		///Persist user data
 		const createUser = await this.UserRepo.create_user(payload);
@@ -49,6 +53,18 @@ export class UserService implements IUserService{
 		return createUser;
 	}
 
+	 validateUsername(username: string): boolean {
+		const name = username.split('#')[0];
+		 const tag = username.split('#')[1];
+		 
+		 //Name Validation
+		 if (!(name.length >= 3 && name.length <= 10)) return false;
+		 console.log('name valid');
+		 //Tag validation
+		 if (!(tag.length >= 3 && tag.length <= 5)) return false;
+		 console.log('name valid');
+		 return true;
+	}
 
 	///Find Single User
 	async profile(userId: Types.ObjectId): Promise<IUser> {
