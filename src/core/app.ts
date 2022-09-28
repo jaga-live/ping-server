@@ -2,10 +2,10 @@ import { InversifyExpressServer } from 'inversify-express-utils';
 import { container } from './inversify/inversify.config';
 import { HttpException } from './exception';
 import express, { NextFunction, Response, Request } from 'express';
-import { Server } from 'socket.io';
 import { createServer } from 'http';
 import 'dotenv/config';
 import { Socket } from './sockets';
+import cors from 'cors'
 export class App {
 	async start() {
 
@@ -13,6 +13,7 @@ export class App {
 		const server = new InversifyExpressServer(container);
 		server.setConfig((app) => {
 			app.use(express.json());
+			app.use(cors())
 		});
 
 		////Global Error Config
