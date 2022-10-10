@@ -20,7 +20,7 @@ export class UserService implements IUserService{
 	) { }
     
 	/////Signup User
-	async signupUser(payload: any): Promise<IUser> {
+	async signupUser(payload: any): Promise<any> {
 		const { email, user_name } = payload;
         
 		/////Validate Email
@@ -33,14 +33,14 @@ export class UserService implements IUserService{
 
 		///Validate Username
 		const validate_user_name = this.validateUsername(user_name);
-		if(!validate_user_name) throw new HttpException('Invalid Username', 400);
+		if(!validate_user_name.status) throw new HttpException('Invalid Username', 400);
         
 		///Persist user data
 		const createUser = await this.UserRepo.create_user(payload);
 
 		///Create Auth for User
 		await this.AuthRepo.create({
-			userId: new Types.ObjectId(createUser[0]._id)
+			userId: new Types.ObjectId(createUser._id)
 		});
 
 		const mailConfig = {
@@ -50,20 +50,28 @@ export class UserService implements IUserService{
 		};
 		await this.mailService.sendMail(mailConfig);
 
-		return createUser;
+		return {
+			...createUser,
+			user: validate_user_name.name,
+			tag: validate_user_name.tag
+		};
 	}
 
-	 validateUsername(username: string): boolean {
+	 validateUsername(username: string): any {
 		const name = username.split('#')[0];
 		 const tag = username.split('#')[1];
 		 
 		 //Name Validation
-		 if (!(name.length >= 3 && name.length <= 10)) return false;
-		 console.log('name valid');
+		 if (!(name.length >= 3 && name.length <= 10)) return { status: false };
+		 
 		 //Tag validation
-		 if (!(tag.length >= 3 && tag.length <= 5)) return false;
-		 console.log('name valid');
-		 return true;
+		 if (!(tag.length >= 3 && tag.length <= 5)) return { status: false };
+		 
+		 return {
+			 status: true,
+			 name,
+			 tag
+		 };
 	}
 
 	///Find Single User

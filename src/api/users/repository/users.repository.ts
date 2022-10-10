@@ -10,8 +10,11 @@ export class UserRepository{
     
 	/////CREATE
 	async create_user(payload: any): Promise<IUser> {
-		const createUser: any = await User.insertMany(payload);
-		return createUser;
+		// const createUser: any = await User.insertMany(payload);
+		const createUser: any = new User(payload);
+		let create = await createUser.save();
+		create = create.toObject();
+		return create;
         
 	}
 
