@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { ValidationException } from '../../../core/exception';
 
 ///////User DTO
 export class UserDto {
@@ -29,14 +30,14 @@ export class CreateUserDto{
 	) { }
     
 	public static async validate(dto: CreateUserDto) {
-
 		const schema = Joi.object({
 			name: Joi.string().required(),
 			email: Joi.string().email().required(),
 			user_name: Joi.string().min(3).required()
 		});
-
-		const validate = await schema.validateAsync(dto);
+		const validate = await schema.validateAsync(dto).catch((err) => {
+			throw new ValidationException('Validation Exception', err, 400);
+		});
 		return validate;
 
 	}

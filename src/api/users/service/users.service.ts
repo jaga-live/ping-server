@@ -22,7 +22,6 @@ export class UserService implements IUserService{
 	/////Signup User
 	async signupUser(payload: any): Promise<any> {
 		const { email, user_name } = payload;
-        
 		/////Validate Email
 		const validateEmail = await this.UserRepo.find_by_email(email);
 		if (validateEmail) throw new HttpException('Email already exists', 409);
