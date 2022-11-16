@@ -4,6 +4,8 @@ import { controller, httpGet, httpPost } from 'inversify-express-utils';
 import { TYPES } from '../../core/inversify/types';
 import { AuthService } from './auth.service';
 import 'dotenv/config';
+import { AuthGuard } from './middleware/auth.middleware';
+import { Req } from '../../core/types/custom.types';
 
 @controller('/auth')
 export class AuthController{
@@ -32,6 +34,13 @@ export class AuthController{
     	const { email, otp } = req.body;
         
     	return this.authService.validateOtp(email, otp);
-    
+    }
+
+    ///Auth Refresh
+    @httpGet('/refresh', AuthGuard)
+    async refresh(req: Req) {
+    	return {
+    		...req.userData
+    	};
     }
 }

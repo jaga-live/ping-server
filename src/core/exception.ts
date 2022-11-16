@@ -9,7 +9,16 @@ export class HttpException extends Error{
 	) { 
 		super(message);
 	}
-    
+}
+
+export class ValidationException extends Error{
+	constructor(
+		public readonly message: string,
+		public readonly error: any,
+		public readonly statusCode: number
+	) {
+		super();
+	}
 }
 
 

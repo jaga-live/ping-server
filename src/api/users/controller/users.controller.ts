@@ -15,10 +15,8 @@ export class UserController{
     
     @httpPost('/signup')
 	async signup(req: any) {
-
 		/////Validate
 		const payload = await CreateUserDto.validate(req.body);
-    
 		////Create User
 		const createUser = await this.userService.signupUser(payload);
 		return createUser;

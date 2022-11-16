@@ -1,6 +1,6 @@
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { container } from './inversify/inversify.config';
-import { HttpException } from './exception';
+import { HttpException, ValidationException } from './exception';
 import express, { NextFunction, Response, Request } from 'express';
 import { createServer } from 'http';
 import 'dotenv/config';
@@ -22,7 +22,10 @@ export class App {
 
 				if (err instanceof HttpException) {
 					res.status(err.statusCode).json({ error: err.message });
-				} else {
+				} else if (err instanceof ValidationException) {
+					res.status(err.statusCode).json({ error: 'Validation Exception', errorInfo: err.error});
+				}
+				else {
 					console.log(err);
 					res.status(500).json({ error: 'Internal Server Exception' });
 				}
