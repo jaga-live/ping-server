@@ -9,5 +9,6 @@ interface userData{
     role: string,
 }
 export interface Req extends Request{
-    userData: userData
+    userData: userData,
+    accessToken: string
 }

@@ -11,10 +11,24 @@ export const AuthGuard = async (req: Req, res: Response, next: NextFunction) => 
 		if (!authToken) throw new HttpException('Bearer Token Missing in request headers', 401);
 		
 		///Validate JWt
-		const verify: any = jwt.verify(authToken, process.env.JWT_SECRET);
+		try {
+			var verify: any = jwt.verify(authToken, process.env.JWT_SECRET);
+		} catch (error) {
+			if (error.name === 'TokenExpiredError') {
+				const {userId, sessionId}: any = jwt.verify(authToken, process.env.JWT_SECRET, {ignoreExpiration: true});
+				await Auth.updateOne({ userId }, {
+					$pull: {
+						jwtSession: sessionId
+					}
+				});
+			}
+		}
 
 		///Validate User Session
-		const getAuth = await Auth.findOne({ userId: verify.userId });
+		const getAuth = await Auth.findOne({
+			userId: verify.userId,
+			jwtSession: verify.sessionId
+		});
 		if (!getAuth) throw new Error();
 
 		req.userData = verify;
@@ -22,8 +36,7 @@ export const AuthGuard = async (req: Req, res: Response, next: NextFunction) => 
 		next();
 		
 	} catch (error) {
-		console.log(error);
-		throw new HttpException('Session Expired', 401);
+		return res.status(401).send({error: 'Not Authorized'});
 	}
 
 

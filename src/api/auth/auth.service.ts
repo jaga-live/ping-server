@@ -101,16 +101,23 @@ export class AuthService{
         
 		////Create Session
 		const sessionId = v4();
+		////Access Token
 		const jwtToken = jwt.sign({
 			userId: user._id,
 			email,
 			role: user.role,
 			sessionId
-		}, this.JWT_SECRET);
+		}, this.JWT_SECRET, { expiresIn: '30s' });
+
+		////Refresh Token
+		const refreshToken = jwt.sign({
+			userId: user._id,
+			sessionId
+		}, this.JWT_SECRET, {expiresIn: '120s'});
 
 		///Update Session
 		await this.AuthRepo.update(getAuth._id, {
-			$push: { session: sessionId },
+			$push: { jwtSession: sessionId },
 			$set: {
 				_2fa: {
 					signature: null,
@@ -121,7 +128,8 @@ export class AuthService{
 
 		return {
 			status: 'ok',
-			token: jwtToken
+			token: jwtToken,
+			refreshToken
 		};
 	}
 

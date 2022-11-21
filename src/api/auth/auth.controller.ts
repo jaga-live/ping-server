@@ -1,11 +1,12 @@
-import { Request } from 'express';
+import { request, Request } from 'express';
 import { inject } from 'inversify';
-import { controller, httpGet, httpPost } from 'inversify-express-utils';
+import { controller, httpGet, httpPost, requestParam } from 'inversify-express-utils';
 import { TYPES } from '../../core/inversify/types';
 import { AuthService } from './auth.service';
 import 'dotenv/config';
 import { AuthGuard } from './middleware/auth.middleware';
 import { Req } from '../../core/types/custom.types';
+import { RefreshToken } from './middleware/auth.refresh';
 
 @controller('/auth')
 export class AuthController{
@@ -34,6 +35,14 @@ export class AuthController{
     	const { email, otp } = req.body;
         
     	return this.authService.validateOtp(email, otp);
+    }
+
+    ///get Access Token from Refresh Token
+    @httpGet('/token/refresh', RefreshToken)
+    async refreshAccessToken(req: Req) {
+    	console.log(req.accessToken);
+    	return {accessToken: req.accessToken};
+        
     }
 
     ///Auth Refresh
