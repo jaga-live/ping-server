@@ -45,11 +45,4 @@ export class AuthController{
         
     }
 
-    ///Auth Refresh
-    @httpGet('/refresh', AuthGuard)
-    async refresh(req: Req) {
-    	return {
-    		...req.userData
-    	};
-    }
 }
