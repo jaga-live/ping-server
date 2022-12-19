@@ -21,17 +21,17 @@ export class UserService implements IUserService{
     
 	/////Signup User
 	async signupUser(payload: any): Promise<any> {
-		const { email, user_name } = payload;
+		const { email, user_name, user_tag } = payload;
 		/////Validate Email
 		const validateEmail = await this.UserRepo.find_by_email(email);
 		if (validateEmail) throw new HttpException('Email already exists', 409);
 
 		/////Validate user_name duplication
-		const validate_user_name_duplication = await this.UserRepo.find_by_user_name(user_name);
+		const validate_user_name_duplication = await this.UserRepo.find_by_user_name(user_name, user_tag);
 		if (validate_user_name_duplication) throw new HttpException('user_name already exists', 409);
 
 		///Validate Username
-		const validate_user_name = this.validateUsername(user_name);
+		const validate_user_name = this.validateUsername(user_name, user_tag);
 		if(!validate_user_name.status) throw new HttpException('Invalid Username', 400);
         
 		///Persist user data
@@ -51,25 +51,23 @@ export class UserService implements IUserService{
 
 		return {
 			...createUser,
-			user: validate_user_name.name,
-			tag: validate_user_name.tag
+			user_name: validate_user_name.user_name,
+			tag: validate_user_name.user_tag
 		};
 	}
 
-	 validateUsername(username: string): any {
-		const name = username.split('#')[0];
-		 const tag = username.split('#')[1];
-		 
+	 validateUsername(user_name: string, user_tag: string): any {
+
 		 //Name Validation
-		 if (!(name.length >= 3 && name.length <= 10)) return { status: false };
+		 if (!(user_name.length >= 3 && user_name.length <= 10)) return { status: false };
 		 
 		 //Tag validation
-		 if (!(tag.length >= 3 && tag.length <= 5)) return { status: false };
+		 if (!(user_tag.length >= 3 && user_tag.length <= 5)) return { status: false };
 		 
 		 return {
 			 status: true,
-			 name,
-			 tag
+			 user_name,
+			 user_tag
 		 };
 	}
 

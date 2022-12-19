@@ -30,8 +30,13 @@ export class UserRepository{
 		return user;
 	}
 
-	async find_by_user_name(user_name: string) {
-		const user = await User.findOne({ user_name });
+	async find_by_user_name(user_name: string, user_tag: string) {
+		const user = await User.findOne({
+			$and: [
+				{ user_name },
+				{ user_tag }
+			] 
+		});
 		return user;
 	}
 
