@@ -16,7 +16,7 @@ export class UserController{
 	) { }
     
     @httpPost('/signup', InternalAuthGuard)
-	async signup(req: any, res: Response) {
+	async signup(req: any) {
 		/////Validate
 		const payload = await CreateUserDto.validate(req.body);
 
