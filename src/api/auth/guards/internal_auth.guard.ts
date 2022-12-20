@@ -18,6 +18,7 @@ export const InternalAuthGuard = async (req: Req, res: Response, next: NextFunct
 		next();
 		
 	} catch (error) {
+		console.log(error)
 		return res.status(401).send({error: 'Not Authorized'});
 	}
 
