@@ -6,4 +6,4 @@ RUN npm install
 COPY . .
 RUN tsc
 CMD ["node", "./dist/main.js"]
-EXPOSE 5000
+EXPOSE 5001
