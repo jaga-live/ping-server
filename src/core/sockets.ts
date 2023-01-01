@@ -12,6 +12,7 @@ export class Socket{
 
 		io.on('connection', (socket) => {
 			console.log('Connected to Socket');
+			
 			socket.on('setup', (userData) => {
 				console.log(userData);
 				socket.join('abcdef');

@@ -11,31 +11,34 @@ export const AuthGuard = async (req: Req, res: Response, next: NextFunction) => 
 		if (!authToken) throw new HttpException('Bearer Token Missing in request headers', 401);
 		
 		///Validate JWt
-		try {
-			var verify: any = jwt.verify(authToken, process.env.JWT_SECRET);
-		} catch (error) {
-			if (error.name === 'TokenExpiredError') {
-				const {userId, sessionId}: any = jwt.verify(authToken, process.env.JWT_SECRET, {ignoreExpiration: true});
-				await Auth.updateOne({ userId }, {
-					$pull: {
-						jwtSession: sessionId
-					}
-				});
-			}
-		}
+		// try {
+		const verify: any = jwt.verify(authToken, process.env.JWT_SECRET);
+		if(!verify?.apps?.ping) throw new HttpException('Unauthorized Exception', 401);
+		// } catch (error) {
+		// 	if (error.name === 'TokenExpiredError') {
+		// 		const {userId, sessionId}: any = jwt.verify(authToken, process.env.JWT_SECRET, {ignoreExpiration: true});
+		// 		await Auth.updateOne({ userId }, {
+		// 			$pull: {
+		// 				jwtSession: sessionId
+		// 			}
+		// 		});
+		// 	}
+		// }
 
 		///Validate User Session
+		const userId = verify.apps.ping.userId;
 		const getAuth = await Auth.findOne({
-			userId: verify.userId,
-			jwtSession: verify.sessionId
+			userId
 		});
 		if (!getAuth) throw new Error();
 
 		req.userData = verify;
+		req.userData.userId = userId;
 		req.userData.jwtToken = authToken;
 		next();
 		
 	} catch (error) {
+		console.log(error);
 		return res.status(401).send({error: 'Not Authorized'});
 	}
 
