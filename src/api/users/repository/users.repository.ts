@@ -36,7 +36,7 @@ export class UserRepository{
 				{ user_name },
 				{ user_tag }
 			] 
-		});
+		}, { email: 0 });
 		return user;
 	}
 

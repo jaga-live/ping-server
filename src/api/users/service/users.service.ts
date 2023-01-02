@@ -9,7 +9,8 @@ import { Types } from 'mongoose';
 
 export interface IUserService{
     signupUser(payload: any): Promise<IUser>,
-    profile(userId: Types.ObjectId): Promise<IUser>,
+	profile(userId: Types.ObjectId): Promise<IUser>,
+	find_by_user_name(user_name: string, user_tag: string)
 }
 @injectable()
 export class UserService implements IUserService{
@@ -75,6 +76,11 @@ export class UserService implements IUserService{
 	async profile(userId: Types.ObjectId): Promise<IUser> {
 		const user = await this.UserRepo.find_by_id(userId);
 		return user;
+	}
+
+	///Find user by user name and tag
+	async find_by_user_name(user_name: string, user_tag: string) {
+		return await this.UserRepo.find_by_user_name(user_name, user_tag);
 	}
 
     

@@ -15,6 +15,7 @@ export class UserController{
 		@inject(TYPES.UserService) private readonly userService: IUserService
 	) { }
     
+	///User Signup
     @httpPost('/signup', InternalAuthGuard)
 	async signup(req: any) {
 		/////Validate
@@ -25,12 +26,21 @@ export class UserController{
 		return createUser;
 	}
 
+    ///User Profile
     @httpGet('/profile', AuthGuard)
     async get(@request() req: Req) {
     	const { userId } = req.userData;
 
     	const user = await this.userService.profile(new Types.ObjectId(userId)) as UserDto;
     	return UserDto.create(user);
+    }
+	
+	///Search User
+	@httpPost('/search')
+    async search(req: Req) {
+    	const { user_name, user_tag } = req.body;
+    	return await this.userService.find_by_user_name(user_name, user_tag);
+
     }
 
 
