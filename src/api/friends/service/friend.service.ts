@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify';
 import { Types } from 'mongoose';
 import { HttpException } from '../../../core/exception';
 import { UserRepository } from '../../users/repository/users.repository';
+import FriendRequest from '../model/friend_request.model';
 import { FriendRepository } from '../repository/friends.repository';
 import { FriendRequestRepository } from '../repository/friend_request.repository';
 import { CreateFriendDto, FriendRequestActions } from '../_dto/friends.dto';
@@ -43,6 +44,53 @@ export class FriendService implements IFriendService{
 			new Types.ObjectId(friendId)
 		);
 		return createUser;
+	}
+
+	///View all friend Incoming or Outgoing Friend Requests
+	async view_friend_request(userId: string) {
+		const friend_request = await FriendRequest.aggregate([
+			{
+				$match: {
+					$or: [
+						{ sender: new Types.ObjectId(userId) },
+						{ receiver: new Types.ObjectId(userId) },
+					]
+				},
+			},
+			{
+				$addFields: {
+					type: {
+						$cond: {
+							if: { $eq: [new Types.ObjectId(userId), '$sender'] },
+							then: 'outgoing',
+							else: 'incoming'
+						}
+					},
+					friendId: {
+						$cond: {
+							if: { $eq: [new Types.ObjectId(userId), '$sender'] },
+							then: '$receiver',
+							else: '$sender'
+						}
+					}
+				}
+			},
+			{
+				$lookup: {
+					from: 'users',
+					localField: 'friendId',
+					foreignField: '_id',
+					as: 'friendInfo'
+				}
+			},
+			{
+				$unwind: '$friendInfo'
+			}
+			
+		]);
+
+		return friend_request;
+
 	}
 
 	///Accept or Reject Friend Request

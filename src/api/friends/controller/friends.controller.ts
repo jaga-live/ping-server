@@ -25,13 +25,20 @@ export class FriendController{
 		};
 	}
 
+	///View Incoming and outgoing friend Request
+	@httpGet('/friend/request', AuthGuard)
+    async viewRequest(req: Req) {
+    	const { userId } = req.userData;
+    	return await this.friendService.view_friend_request(userId);
+    }
+
     ///Accept or Reject Request
     @httpPatch('/friend/request/:requestId/:action', AuthGuard)
-    async acceptOrReject(
+	async acceptOrReject(
         @requestParam('requestId') requestId: string,
         @requestParam('action') action: string,
         @request() req: Req
-    ) {
+	) {
     	const { userId } = req.userData;
     	await this.friendService.accept_or_reject(
     		new Types.ObjectId(userId),
@@ -42,7 +49,7 @@ export class FriendController{
     	return {
     		message: 'Ok'
     	};
-    }
+	}
 	
 	///Friend List
 	@httpGet('/friends', AuthGuard)
