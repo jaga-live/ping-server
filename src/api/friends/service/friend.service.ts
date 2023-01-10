@@ -48,15 +48,15 @@ export class FriendService implements IFriendService{
 
 	///View all friend Incoming or Outgoing Friend Requests
 	async view_friend_request(userId: string, requestType: string) {
-		let matchQuery = {}
+		let matchQuery = {};
 
-		if (!['incoming', 'outgoing'].includes(requestType)) throw new HttpException('Invalid Friend Request Type!', 400)
+		if (!['incoming', 'outgoing'].includes(requestType)) throw new HttpException('Invalid Friend Request Type!', 400);
 		if (requestType === 'incoming') matchQuery = {
 			receiver: new Types.ObjectId(userId)
-		}
+		};
 		if (requestType === 'outgoing') matchQuery = {
 			sender: new Types.ObjectId(userId)
-		}
+		};
 
 		const friend_request = await FriendRequest.aggregate([
 			{

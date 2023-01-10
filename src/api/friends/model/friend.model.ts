@@ -4,7 +4,7 @@ import { Document, model, Schema, Types } from 'mongoose';
 export interface IFriend extends Document{
 	users: Types.ObjectId[],
 	createdAt: Date,
-	isBlocked: Boolean
+	isBlocked: boolean
 }
 
 const FriendSchema = new Schema({
