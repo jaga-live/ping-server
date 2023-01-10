@@ -26,10 +26,12 @@ export class FriendController{
 	}
 
 	///View Incoming and outgoing friend Request
-	@httpGet('/friend/request', AuthGuard)
+	@httpGet('/friend/request/:requestType', AuthGuard)
     async viewRequest(req: Req) {
-    	const { userId } = req.userData;
-    	return await this.friendService.view_friend_request(userId);
+		const { userId } = req.userData;
+		const { requestType } = req.params
+
+    	return await this.friendService.view_friend_request(userId, requestType);
     }
 
     ///Accept or Reject Request

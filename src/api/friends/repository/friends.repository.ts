@@ -20,6 +20,7 @@ export class FriendRepository implements IFriendRepository{
 
 	///View
 	async findAll(userId: Types.ObjectId) {
+		
 		const friends = await Friend.aggregate([
 			{
 				$match: {
@@ -41,17 +42,17 @@ export class FriendRepository implements IFriendRepository{
 					from: 'users',
 					localField: 'users',
 					foreignField: '_id',
-					as: 'user'
+					as: 'friend'
 				}
 			},
 			{
-				$unwind: '$user'
+				$unwind: '$friend'
 			},
 			{
 				$replaceRoot: {
-					newRoot: '$user'
+					newRoot: '$friend'
 				}
-			}
+			}, { $sort: { name: 1 } }
 		]);
 		return friends;
 	}

@@ -47,32 +47,26 @@ export class FriendService implements IFriendService{
 	}
 
 	///View all friend Incoming or Outgoing Friend Requests
-	async view_friend_request(userId: string) {
+	async view_friend_request(userId: string, requestType: string) {
+		let matchQuery = {}
+
+		if (!['incoming', 'outgoing'].includes(requestType)) throw new HttpException('Invalid Friend Request Type!', 400)
+		if (requestType === 'incoming') matchQuery = {
+			receiver: new Types.ObjectId(userId)
+		}
+		if (requestType === 'outgoing') matchQuery = {
+			sender: new Types.ObjectId(userId)
+		}
+
 		const friend_request = await FriendRequest.aggregate([
 			{
 				$match: {
-					$or: [
-						{ sender: new Types.ObjectId(userId) },
-						{ receiver: new Types.ObjectId(userId) },
-					]
+					...matchQuery
 				},
 			},
 			{
 				$addFields: {
-					type: {
-						$cond: {
-							if: { $eq: [new Types.ObjectId(userId), '$sender'] },
-							then: 'outgoing',
-							else: 'incoming'
-						}
-					},
-					friendId: {
-						$cond: {
-							if: { $eq: [new Types.ObjectId(userId), '$sender'] },
-							then: '$receiver',
-							else: '$sender'
-						}
-					}
+					friendId: requestType === 'incoming'? '$sender': '$receiver'
 				}
 			},
 			{
@@ -113,11 +107,11 @@ export class FriendService implements IFriendService{
 		///Update status in request
 		await this.friendRequestRepo.update(requestId, expression);
 
-		///Create new Relationship
+		// ///Create new Relationship
 		await this.friendRepo.create(
 			[
 				new Types.ObjectId(userId),
-				new Types.ObjectId(requestId),
+				new Types.ObjectId(isRequestValid.sender),
 			]
 		);
         
