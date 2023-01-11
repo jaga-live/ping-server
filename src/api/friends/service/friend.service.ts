@@ -61,7 +61,8 @@ export class FriendService implements IFriendService{
 		const friend_request = await FriendRequest.aggregate([
 			{
 				$match: {
-					...matchQuery
+					...matchQuery,
+					status: 'pending'
 				},
 			},
 			{
