@@ -4,13 +4,15 @@ import { Types } from 'mongoose';
 import { TYPES } from '../../../core/inversify/types';
 import { Req } from '../../../core/types/custom.types';
 import { AuthGuard } from '../../auth/middleware/auth.middleware';
+import { ChatRepository } from '../../chats/repository/chat.repository';
 import { FriendService } from '../service/friend.service';
 
 
 @controller('')
 export class FriendController{
 	constructor(
-        @inject(TYPES.FriendService) private readonly friendService: FriendService
+        @inject(TYPES.FriendService) private readonly friendService: FriendService,
+        @inject(TYPES.FriendService) private readonly chatRepo: ChatRepository,
 	) { }
     
     ///Send Friend Request
@@ -42,11 +44,16 @@ export class FriendController{
         @request() req: Req
 	) {
     	const { userId } = req.userData;
-    	await this.friendService.accept_or_reject(
+    	const createFriends = await this.friendService.accept_or_reject(
     		new Types.ObjectId(userId),
     		new Types.ObjectId(requestId),
     		action
-    	);
+		);
+		
+		await this.chatRepo.create({
+			chatType: 'DM',
+			users: createFriends.users
+		});
 
     	return {
     		message: 'Ok'

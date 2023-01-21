@@ -21,6 +21,8 @@ import { FriendRequestRepository } from '../../api/friends/repository/friend_req
 import { Server } from 'socket.io';
 import { SocketProvider } from '../providers/sockets.provider';
 import { ChatEventsHandler } from '../../events/sockets/chats.events';
+import { ChatService } from '../../api/chats/service/chat.service';
+import { ChatRepository } from '../../api/chats/repository/chat.repository';
 
 ///////Bindings
 
@@ -29,6 +31,7 @@ container.bind<AuthService>(TYPES.AuthService).to(AuthService);
 container.bind<Mongoose>(TYPES.MongooseService).to(Mongoose);
 container.bind<IUserService>(TYPES.UserService).to(UserService);
 container.bind<IFriendService>(TYPES.FriendService).to(FriendService);
+container.bind<ChatService>(TYPES.ChatService).to(ChatService);
 container.bind<IMailService>(TYPES.MailService).to(MailService);
 
 /////Repository
@@ -36,6 +39,7 @@ container.bind(UserRepository).toSelf();
 container.bind(AuthRepository).toSelf();
 container.bind(FriendRepository).toSelf();
 container.bind(FriendRequestRepository).toSelf();
+container.bind(ChatRepository).toSelf();
 
 ///Providers
 container.bind<SocketProvider>(SocketProvider).to(SocketProvider);

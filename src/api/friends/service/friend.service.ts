@@ -109,7 +109,7 @@ export class FriendService implements IFriendService{
 		await this.friendRequestRepo.update(requestId, expression);
 
 		// ///Create new Relationship
-		await this.friendRepo.create(
+		return await this.friendRepo.create(
 			[
 				new Types.ObjectId(userId),
 				new Types.ObjectId(isRequestValid.sender),

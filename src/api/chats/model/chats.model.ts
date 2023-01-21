@@ -2,13 +2,13 @@ import { model, Schema, Types } from 'mongoose';
 
 
 interface IChat{
-    type: string
+    chatType: string
     users: Types.ObjectId[]
     pfp: string
 }
 
 const ChatSchema = new Schema({
-	type: String,
+	chatType: String,
 	users: {
 		type: [Types.ObjectId],
 		ref: 'users'

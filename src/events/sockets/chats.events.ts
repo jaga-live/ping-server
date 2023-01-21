@@ -10,14 +10,11 @@ export class ChatEventsHandler {
     	this.socketProvider.getIO().on('connection', (socket) => {
   
     		// your code for handling events
-    		socket.on('chat', async (data) => {
-    			console.log('start chat');
+    		socket.on('initial', async (data) => {
     			const authStatus = await this.socketProvider.authMiddleware(socket);
     			if (!authStatus?.isAuthenticated) return;
-
-    			console.log('my-event received:', data);
-    			socket.emit('my-response', 'Hello from server');
     		});
+		
     	});
     }
 }

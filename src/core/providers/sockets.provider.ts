@@ -17,7 +17,6 @@ export class SocketProvider {
 		        origin: '*'
 	        }
 		});
-		// this.io.use((this.authMiddleware));
 	}
 
 	public getIO(): Sockets.Server {
@@ -26,12 +25,11 @@ export class SocketProvider {
 
 	///Common Auth Middleware for Socket Events
 	public async authMiddleware(socket: Sockets.Socket) {
-		// check the socket's request object for an auth token
 		const token = socket.handshake.query.tokens;
-		if (!token) {
-			this.errorEvent(socket);
-			return;
-		}
+		// if (!token) {
+		// 	this.errorEvent(socket);
+		// 	return;
+		// }
     
 		console.log('middleware sockets', token);
 		return {
