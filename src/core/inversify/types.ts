@@ -4,6 +4,7 @@ export const TYPES = {
 	MongooseService: Symbol('Mongoose'),
 	UserService: Symbol('UserService'),
 	ChatService: Symbol('ChatService'),
+	MessageService: Symbol('MessageService'),
 	FriendService: Symbol('FriendService'),
 	MailService: Symbol('MailService'),
 

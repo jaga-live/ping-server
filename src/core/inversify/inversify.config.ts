@@ -23,6 +23,8 @@ import { SocketProvider } from '../providers/sockets.provider';
 import { ChatEventsHandler } from '../../events/sockets/chats.events';
 import { ChatService } from '../../api/chats/service/chat.service';
 import { ChatRepository } from '../../api/chats/repository/chat.repository';
+import { MessageRepository } from '../../api/message/repository/message.repository';
+import { MessageService } from '../../api/message/service/message.service';
 
 ///////Bindings
 
@@ -32,6 +34,7 @@ container.bind<Mongoose>(TYPES.MongooseService).to(Mongoose);
 container.bind<IUserService>(TYPES.UserService).to(UserService);
 container.bind<IFriendService>(TYPES.FriendService).to(FriendService);
 container.bind<ChatService>(TYPES.ChatService).to(ChatService);
+container.bind<MessageService>(TYPES.MessageService).to(MessageService);
 container.bind<IMailService>(TYPES.MailService).to(MailService);
 
 /////Repository
@@ -40,6 +43,7 @@ container.bind(AuthRepository).toSelf();
 container.bind(FriendRepository).toSelf();
 container.bind(FriendRequestRepository).toSelf();
 container.bind(ChatRepository).toSelf();
+container.bind(MessageRepository).toSelf();
 
 ///Providers
 container.bind<SocketProvider>(SocketProvider).to(SocketProvider);
