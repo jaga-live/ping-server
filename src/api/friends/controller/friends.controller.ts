@@ -12,7 +12,7 @@ import { FriendService } from '../service/friend.service';
 export class FriendController{
 	constructor(
         @inject(TYPES.FriendService) private readonly friendService: FriendService,
-        @inject(TYPES.FriendService) private readonly chatRepo: ChatRepository,
+        @inject(ChatRepository) private readonly chatRepo: ChatRepository,
 	) { }
     
     ///Send Friend Request
