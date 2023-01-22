@@ -41,9 +41,9 @@ export class ChatService{
 			{ $unwind: '$user' },
 			{ $project: { _users: 0 } }
 			
-		])
+		]);
 
-		return chats
+		return chats;
 	}
     
 }
