@@ -9,7 +9,7 @@ export class ChatEventsHandler {
     public handleConnection() {
     	const io = this.socketProvider.getIO();
     	io.on('connection', (socket) => {
-    		console.log('connected to client');
+    		console.log('Connected to Client');
 
     		/// Join room for DM and Group
     		socket.on('private_chat', async (data) => {
