@@ -1,4 +1,6 @@
 import { inject, injectable } from 'inversify';
+import { Types } from 'mongoose';
+import Chats from '../model/chats.model';
 import { ChatRepository } from '../repository/chat.repository';
 
 
@@ -7,5 +9,41 @@ export class ChatService{
 	constructor(
         @inject(ChatRepository) private readonly chatRepo: ChatRepository
 	) { }
+
+	///Get
+	async get_all_chats(userId: Types.ObjectId) {
+		
+		const chats = await Chats.aggregate([
+			{
+				$match: {
+					users: userId
+				}
+			},
+			{
+				$addFields: {_users: '$users'}
+			},
+			{
+				$unwind: '$_users'
+			},
+			{
+				$match: {
+					_users: {$ne: userId}
+				}
+			},
+			{
+				$lookup: {
+					from: 'users',
+					localField: '_users',
+					foreignField: '_id',
+					as: 'user'
+				}
+			},
+			{ $unwind: '$user' },
+			{ $project: { _users: 0 } }
+			
+		])
+
+		return chats
+	}
     
 }

@@ -14,11 +14,12 @@ export const container = new Container({
 import '../../api/users/controller/users.controller';
 import '../../api/auth/auth.controller';
 import '../../api/friends/controller/friends.controller';
+import '../../api/chats/controller/chats.controller';
+
 import { AuthRepository } from '../../api/auth/repository/auth.repository';
 import { FriendRepository } from '../../api/friends/repository/friends.repository';
 import { FriendService, IFriendService } from '../../api/friends/service/friend.service';
 import { FriendRequestRepository } from '../../api/friends/repository/friend_request.repository';
-import { Server } from 'socket.io';
 import { SocketProvider } from '../providers/sockets.provider';
 import { ChatEventsHandler } from '../../events/sockets/chats.events';
 import { ChatService } from '../../api/chats/service/chat.service';

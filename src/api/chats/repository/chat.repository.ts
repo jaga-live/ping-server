@@ -9,4 +9,9 @@ export class ChatRepository{
 		const chatModel = new Chat(payload);
 		return await chatModel.save();
 	}
+
+	///View all chats for a User ID
+	async view_by_userId() {
+		
+	}
 }
