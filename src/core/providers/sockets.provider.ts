@@ -2,7 +2,7 @@ import { inject } from 'inversify';
 import { provide } from 'inversify-binding-decorators';
 import Sockets, {Server as SocketIO} from 'socket.io';
 import { httpServer } from '../app';
-
+import { verify } from 'jsonwebtoken';
 ///Protected Events
 const protectedSocketEvents = ['chat', 'reply'];
 const publicSocketEvents = ['welcome'];
@@ -25,15 +25,24 @@ export class SocketProvider {
 
 	///Common Auth Middleware for Socket Events
 	public async authMiddleware(socket: Sockets.Socket) {
-		const token = socket.handshake.query.tokens;
-		// if (!token) {
-		// 	this.errorEvent(socket);
-		// 	return;
-		// }
+		const token: any = socket.handshake.query.token;
+		if (!token) {
+			this.errorEvent(socket);
+			console.log('JWT Token Missing');
+			return;
+		}
+
+		try {
+			var decrypt = verify(token, process.env.JWT_SECRET);
+		} catch (error) {
+			this.errorEvent(socket);
+			console.log('Invalid JWT');
+			return;
+		}
     
-		console.log('middleware sockets', token);
 		return {
-			isAuthenticated: true
+			isAuthenticated: true,
+			userData: decrypt
 		};
 	}
 

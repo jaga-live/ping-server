@@ -21,11 +21,12 @@ import { FriendRepository } from '../../api/friends/repository/friends.repositor
 import { FriendService, IFriendService } from '../../api/friends/service/friend.service';
 import { FriendRequestRepository } from '../../api/friends/repository/friend_request.repository';
 import { SocketProvider } from '../providers/sockets.provider';
-import { ChatEventsHandler } from '../../events/sockets/chats.events';
+import { ChatEvents } from '../../events/sockets/chats.events';
 import { ChatService } from '../../api/chats/service/chat.service';
 import { ChatRepository } from '../../api/chats/repository/chat.repository';
 import { MessageRepository } from '../../api/message/repository/message.repository';
 import { MessageService } from '../../api/message/service/message.service';
+import { ChatEventsHandler } from '../../handlers/sockets/chat_events.handler';
 
 ///////Bindings
 
@@ -49,5 +50,8 @@ container.bind(MessageRepository).toSelf();
 ///Providers
 container.bind<SocketProvider>(SocketProvider).to(SocketProvider);
 
-///Event Handler
+///Events
+container.bind<ChatEvents>(ChatEvents).to(ChatEvents);
+
+///handlers
 container.bind<ChatEventsHandler>(ChatEventsHandler).to(ChatEventsHandler);

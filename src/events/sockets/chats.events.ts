@@ -1,12 +1,16 @@
 import { inject, injectable } from 'inversify';
 import { SocketProvider } from '../../core/providers/sockets.provider';
+import { ChatEventsHandler } from '../../handlers/sockets/chat_events.handler';
 
 
 @injectable()
-export class ChatEventsHandler {
-    @inject(SocketProvider) private socketProvider: SocketProvider;
+export class ChatEvents {
+	constructor(
+		@inject(SocketProvider) private socketProvider: SocketProvider,
+		@inject(ChatEventsHandler) private chatEventsHandler: ChatEventsHandler,
+	){}
 
-    public handleConnection() {
+	public handleConnection() {
     	const io = this.socketProvider.getIO();
     	io.on('connection', (socket) => {
     		console.log('Connected to Client');
@@ -20,14 +24,24 @@ export class ChatEventsHandler {
     		});
 
     		///Receive Message
-    		socket.on('message', async (data) => {
+			socket.on('message', async (data) => {
+				const auth = await this.socketProvider.authMiddleware(socket);
+				if (!auth?.isAuthenticated) return;
+
     			console.log('Private message', data);
     			const { _id, message } = data;
 
     			///Send message to room
-    			io.to(_id).emit('message', message);
+				const inRoom = socket.rooms.has(data._id);
+				if (!inRoom) socket.join(_id);
+				
+				io.in(_id).emit('message', message);
+
+				///Chats Handler
+				data.messageType = 'DM';
+				this.chatEventsHandler.handle(auth.userData, data);
     		});
 		
     	});
-    }
+	}
 }
