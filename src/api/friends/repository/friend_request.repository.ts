@@ -6,8 +6,7 @@ import FriendRequest from '../model/friend_request.model';
 export interface IFriendRequestRepository{
 	create(sender: Types.ObjectId, receiver: Types.ObjectId)
 	find_by_id(_id: Types.ObjectId)
-	find_by_sender(_id: Types.ObjectId): Promise<IFriend>
-	find_by_receiver(_id: Types.ObjectId): Promise<IFriend>
+	find_by_users(sender: Types.ObjectId, receiver: Types.ObjectId): Promise<IFriend>
 	update(requestId: Types.ObjectId, expression: any)
 	delete(expression: any): Promise<void>
 }
@@ -32,18 +31,10 @@ export class FriendRequestRepository implements IFriendRequestRepository{
 	}
 
 	///Find by Sender
-	async find_by_sender(_id: Types.ObjectId): Promise<IFriend> {
+	async find_by_users(sender: Types.ObjectId, receiver: Types.ObjectId): Promise<IFriend> {
 		const friendRequest = await FriendRequest.findOne({
-			sender: _id
-		}) as IFriend;
-
-		return friendRequest;
-	}
-
-	///Find by Sender
-	async find_by_receiver(_id: Types.ObjectId): Promise<IFriend> {
-		const friendRequest = await FriendRequest.findOne({
-			sender: _id
+			sender,
+			receiver
 		}) as IFriend;
 
 		return friendRequest;

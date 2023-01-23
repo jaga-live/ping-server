@@ -58,7 +58,7 @@ export class FriendRepository implements IFriendRepository{
 	}
 	async findRequestByfriends(users: Types.ObjectId[]) {
 		const friendRequest = await Friend.findOne({
-			users: { $in: users }
+			users: {$all: users }
 		});
 
 		return friendRequest;

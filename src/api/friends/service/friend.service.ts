@@ -24,19 +24,20 @@ export class FriendService implements IFriendService{
     
 	///Send Friend Request
 	async send_request(userId: string, friendId: string): Promise<any> {
-
+		const sender = new Types.ObjectId(userId);
+		const receiver = new Types.ObjectId(friendId);
 		///Check if user valid
-		const isFriendValid = await this.userRepo.find_by_id(new Types.ObjectId(userId));
+		const isFriendValid = await this.userRepo.find_by_id(sender);
 		if (!isFriendValid) throw new HttpException('User Not Found', 400);
 
 		///Check if users already friends
 		const alreadyFriends = await this.friendRepo.findRequestByfriends([
-			new Types.ObjectId(userId),
-			new Types.ObjectId(friendId)
+			sender,
+			receiver
 		]);
 		if (alreadyFriends) throw new HttpException('Already Friends', 400);
         
-		const checkRequest = await this.friendRequestRepo.find_by_sender(new Types.ObjectId(userId));
+		const checkRequest = await this.friendRequestRepo.find_by_users(sender, receiver);
 		if (checkRequest) throw new HttpException('Friend Request Already Sent', 400);
 
 		const createUser = await this.friendRequestRepo.create(
