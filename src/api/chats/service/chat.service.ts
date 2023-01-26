@@ -30,7 +30,7 @@ export class ChatService{
 		const socketIds = await this.redisService.fetchMultipleSets(payload.users);
 		if (socketIds.length !== 0) {
 			const io = container.get(SocketProvider);
-			io.getIO().in(socketIds).emit('create_dm', { message: 'create DM' });
+			io.getIO().to(socketIds).emit('create_dm', { message: 'create DM' });
 		}
 
 		return createChat;
