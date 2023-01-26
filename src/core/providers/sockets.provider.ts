@@ -33,16 +33,18 @@ export class SocketProvider {
 		}
 
 		try {
-			var decrypt = verify(token, process.env.JWT_SECRET);
+			var decrypt: any = verify(token, process.env.JWT_SECRET);
 		} catch (error) {
 			this.errorEvent(socket);
 			console.log('Invalid JWT');
 			return;
 		}
     
+		const userId = decrypt.apps.ping.userId;
 		return {
 			isAuthenticated: true,
-			userData: decrypt
+			userData: decrypt,
+			userId
 		};
 	}
 

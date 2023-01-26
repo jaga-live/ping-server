@@ -5,6 +5,7 @@ interface IChat{
     chatType: string
     users: Types.ObjectId[]
 	pfp: string,
+	createdBy: string,
 	modifiedAt: Date
 }
 
@@ -15,6 +16,10 @@ const ChatSchema = new Schema({
 		ref: 'users'
 	},
 	pfp: String,
+	createdBy: {
+		type: Types.ObjectId,
+		default: null
+	},
 	modifiedAt: {
 		type: Date,
 		default: new Date()

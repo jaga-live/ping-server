@@ -27,6 +27,7 @@ import { ChatRepository } from '../../api/chats/repository/chat.repository';
 import { MessageRepository } from '../../api/message/repository/message.repository';
 import { MessageService } from '../../api/message/service/message.service';
 import { ChatEventsHandler } from '../../handlers/sockets/chat_events.handler';
+import { RedisService } from '../../shared/redis/redis.service';
 
 ///////Bindings
 
@@ -38,6 +39,9 @@ container.bind<IFriendService>(TYPES.FriendService).to(FriendService);
 container.bind<ChatService>(TYPES.ChatService).to(ChatService);
 container.bind<MessageService>(TYPES.MessageService).to(MessageService);
 container.bind<IMailService>(TYPES.MailService).to(MailService);
+
+///Shared Service
+container.bind<RedisService>(TYPES.RedisService).to(RedisService);
 
 /////Repository
 container.bind(UserRepository).toSelf();

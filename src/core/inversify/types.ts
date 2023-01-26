@@ -6,8 +6,11 @@ export const TYPES = {
 	ChatService: Symbol('ChatService'),
 	MessageService: Symbol('MessageService'),
 	FriendService: Symbol('FriendService'),
+	
+	///Shared Service
 	MailService: Symbol('MailService'),
-
+	RedisService: Symbol('RedisService'),
+	
 	//Middleware
 	AuthGuard: Symbol('AuthGuard')
 };
