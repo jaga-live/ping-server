@@ -51,8 +51,11 @@ export class ChatEvents {
 				const inRoom = socket.rooms.has(data._id);
 				if (!inRoom) socket.join(_id);
 				
-				io.in(_id).emit('message', message);
-
+				io.in(_id).emit('message', {
+					...data,
+					userId: auth.userId 
+				});
+				
 				///Chats Handler
 				data.messageType = 'DM';
 				this.chatEventsHandler.handle(auth.userData, data);

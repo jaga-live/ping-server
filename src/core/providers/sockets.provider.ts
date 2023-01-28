@@ -26,6 +26,7 @@ export class SocketProvider {
 	///Common Auth Middleware for Socket Events
 	public async authMiddleware(socket: Sockets.Socket) {
 		const token: any = socket.handshake.query.token;
+	
 		if (!token) {
 			this.errorEvent(socket);
 			console.log('JWT Token Missing');
