@@ -3,7 +3,6 @@ import { Types } from 'mongoose';
 import { container } from '../../../core/inversify/inversify.config';
 import { TYPES } from '../../../core/inversify/types';
 import { SocketProvider } from '../../../core/providers/sockets.provider';
-import { ChatEventsHandler } from '../../../handlers/sockets/chat_events.handler';
 import { RedisService } from '../../../shared/redis/redis.service';
 import Chats from '../model/chats.model';
 import { ChatRepository } from '../repository/chat.repository';
