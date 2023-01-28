@@ -64,7 +64,8 @@ export class ChatService{
 				}
 			},
 			{ $unwind: '$user' },
-			{ $project: { _users: 0 } }
+			{ $project: { _users: 0 } },
+			{ $sort: { modifiedAt: -1 } }
 			
 		]);
 
