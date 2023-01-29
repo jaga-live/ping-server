@@ -14,7 +14,7 @@ export class ChatRepository{
 
 	///Get Chat by chatId
 	async getOne(chatId: Types.ObjectId) {
-		return await Chat.findOne({ _id: chatId })
+		return await Chat.findOne({ _id: chatId });
 	}
 	
 	///Update

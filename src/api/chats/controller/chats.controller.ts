@@ -32,16 +32,16 @@ export class ChatController{
 
 	/////////Messages///////
 	@httpGet('/:chatId/messages', AuthGuard)
-	async getChatMessage(req: Req) {
-		let chatId: any = req.params.chatId
-		let userId: any = req.userData.userId
-		const { ObjectId } = Types
+    async getChatMessage(req: Req) {
+    	let chatId: any = req.params.chatId;
+    	let userId: any = req.userData.userId;
+    	const { ObjectId } = Types;
 
-		if (!ObjectId.isValid(chatId) || !ObjectId.isValid(userId)) throw new HttpException('Invalid Params', 400)
+    	if (!ObjectId.isValid(chatId) || !ObjectId.isValid(userId)) throw new HttpException('Invalid Params', 400);
 		
-		chatId = new ObjectId(chatId)
-		userId = new ObjectId(userId)
+    	chatId = new ObjectId(chatId);
+    	userId = new ObjectId(userId);
 
-		return await this.messageService.get_message_by_chatId(chatId, userId, req.query)
-	}
+    	return await this.messageService.get_message_by_chatId(chatId, userId, req.query);
+    }
 }
