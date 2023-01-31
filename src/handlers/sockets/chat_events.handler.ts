@@ -11,18 +11,8 @@ export class ChatEventsHandler{
 	) { }
 	
 	async handle(userData: any, payload: any) {
-		const { _id, messageType, message } = payload;
+		const { _id } = payload;
 		const userId = userData.apps.ping.userId;
-
-		const messagePayload = {
-			chatId: _id,
-			type: messageType,
-			message: message,
-			sender: userId 
-		};
-
-		///Save Message
-		await this.messageRepo.create(messagePayload);
 
 		///Update Chat
 		await this.chatRepo.update(_id, { modifiedAt: new Date() });
