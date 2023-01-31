@@ -3,7 +3,7 @@ import { TYPES } from '../../core/inversify/types';
 import { SocketProvider } from '../../core/providers/sockets.provider';
 import { ChatEventsHandler } from '../../handlers/sockets/chat_events.handler';
 import { RedisService } from '../../shared/redis/redis.service';
-let temp: string;
+import { MessageRepository } from '../../api/message/repository/message.repository';
 
 @injectable()
 export class ChatEvents {
@@ -11,6 +11,7 @@ export class ChatEvents {
 		@inject(SocketProvider) private socketProvider: SocketProvider,
 		@inject(ChatEventsHandler) private chatEventsHandler: ChatEventsHandler,
 		@inject(TYPES.RedisService) private redisService: RedisService,
+		@inject(MessageRepository) private readonly messageRepo: MessageRepository,
 	){}
 
 	public handleConnection() {
@@ -45,21 +46,31 @@ export class ChatEvents {
 				if (!auth?.isAuthenticated) return;
 
     			console.log('Private message', data);
-    			const { _id, message } = data;
+    			const { _id, message, sender } = data;
 
     			///Send message to room
 				const inRoom = socket.rooms.has(data._id);
 				if (!inRoom) socket.join(_id);
 				
+				///Save Message
+				const messagePayload = {
+					chatId: _id,
+					type: 'DM',
+					message,
+					sender 
+				};
+				const saveMessage = await this.messageRepo.create(messagePayload)
+				console.log(saveMessage, 'Save Message')
+
 				io.in(_id).emit('message', {
 					...data,
-					userId: auth.userId 
+					_id: saveMessage._id
 				});
 				
 				///Chats Handler
 				data.messageType = 'DM';
 				this.chatEventsHandler.handle(auth.userData, data);
-    		});
+			});
 		
     	});
 	}
