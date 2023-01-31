@@ -59,14 +59,14 @@ export class ChatEvents {
 					message,
 					sender 
 				};
-				const saveMessage = await this.messageRepo.create(messagePayload)
-				console.log(saveMessage, 'Save Message')
-
+				const saveMessage = await this.messageRepo.create(messagePayload);
+				
 				io.in(_id).emit('message', {
 					...data,
 					_id: saveMessage._id
 				});
 				
+				console.log('MESSAGE', message);
 				///Chats Handler
 				data.messageType = 'DM';
 				this.chatEventsHandler.handle(auth.userData, data);

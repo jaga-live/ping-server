@@ -12,7 +12,6 @@ export class ChatEventsHandler{
 	
 	async handle(userData: any, payload: any) {
 		const { _id } = payload;
-		const userId = userData.apps.ping.userId;
 
 		///Update Chat
 		await this.chatRepo.update(_id, { modifiedAt: new Date() });
