@@ -1,7 +1,7 @@
 //////Shared mail Info
 const _defaultMailContext = {
-	appUrl :'https://ping.jagalive.in/',
-	_2faUrl : 'https://ping.jagalive.in/verification/2fa/'
+	appUrl :'https://ping.jaga.live/',
+	_2faUrl : 'https://ping.jaga.live/verification/2fa/'
 };
 
 enum MailTypes {
